@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expenditure Manager</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Expenditure Manager</h1>
+
+        <!-- Display Total and Limit Status -->
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Total Spent: UGX {{ total_spent }}</h3>
+            </div>
+            <div class="col-md-6">
+                <h3>Spending Limit: UGX {{ limit }}</h3>
+                {% if over_limit %}
+                    <div class="alert alert-danger">You have exceeded the spending limit!</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Add Expenditure Form -->
+        <h4>Add Expenditure</h4>
+        <form action="/add" method="POST">
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" id="description" name="description" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount (UGX)</label>
+                <input type="number" id="amount" name="amount" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Expenditure</button>
+        </form>
+
+        <!-- Set Spending Limit Form -->
+        <h4 class="my-4">Set Spending Limit</h4>
+        <form action="/set_limit" method="POST">
+            <div class="form-group">
+                <label for="limit">Limit (UGX)</label>
+                <input type="number" id="limit" name="limit" class="form-control" value="{{ limit }}" required>
+            </div>
+            <button type="submit" class="btn btn-secondary">Set Limit</button>
+        </form>
+
+        <hr>
+
+        <!-- Expenditures List -->
+        <h4 class="my-4">Expenditures</h4>
+        <ul class="list-group">
+            {% for expenditure in expenditures %}
+            <li class="list-group-item">
+                <strong>{{ expenditure.description }}</strong> - UGX {{ expenditure.amount }}
+                <a href="/delete/{{ expenditure.id }}" class="btn btn-danger btn-sm float-right ml-2">Delete</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
